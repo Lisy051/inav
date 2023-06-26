@@ -520,6 +520,10 @@ void i2cInit(I2CDevice device)
         case I2C_SPEED_200KHZ:
             i2cInit.I2C_ClockSpeed = 200000;
             break;
+
+        case I2C_SPEED_40KHZ:
+            i2cInit.I2C_ClockSpeed = 40000;
+            break;
     }
 
     I2C_Init(i2c->dev, &i2cInit);

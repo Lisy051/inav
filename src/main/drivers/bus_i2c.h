@@ -28,6 +28,7 @@
 #include "drivers/rcc_types.h"
 
 typedef enum {  // Weird mapping to keep config compatible with previos version
+    I2C_SPEED_40KHZ    = 4,
     I2C_SPEED_100KHZ    = 2,
     I2C_SPEED_200KHZ    = 3,
     I2C_SPEED_400KHZ    = 0,

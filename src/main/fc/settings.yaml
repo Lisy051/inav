@@ -86,7 +86,7 @@ tables:
   - name: ltm_rates
     values: ["NORMAL", "MEDIUM", "SLOW"]
   - name: i2c_speed
-    values: ["400KHZ", "800KHZ", "100KHZ", "200KHZ"]
+    values: ["400KHZ", "800KHZ", "100KHZ", "200KHZ", "40KHZ"]
   - name: debug_modes
     values: ["NONE", "AGL", "FLOW_RAW", "FLOW", "ALWAYS", "SAG_COMP_VOLTAGE",
       "VIBE", "CRUISE", "REM_FLIGHT_TIME", "SMARTAUDIO", "ACC",

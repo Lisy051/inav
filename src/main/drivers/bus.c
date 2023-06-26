@@ -197,7 +197,13 @@ busDevice_t * busDeviceOpen(busType_e bus, devHardwareType_e hw, uint8_t tag)
 void busSetSpeed(const busDevice_t * dev, busSpeed_e speed)
 {
     UNUSED(speed);
-
+#ifdef USE_I2C
+    const uint8_t speed_map[] = {   I2C_SPEED_200KHZ,   // BUS_SPEED_INITIALIZATION
+                                    I2C_SPEED_40KHZ,    // BUS_SPEED_SLOW
+                                    I2C_SPEED_100KHZ,   // BUS_SPEED_STANDARD
+                                    I2C_SPEED_400KHZ,   // BUS_SPEED_FAST
+                                    I2C_SPEED_800KHZ};  // BUS_SPEED_ULTRAFAST
+#endif
     switch (dev->busType) {
         default:
         case BUSTYPE_NONE:
@@ -209,7 +215,10 @@ void busSetSpeed(const busDevice_t * dev, busSpeed_e speed)
 #endif
             break;
         case BUSTYPE_I2C:
-            // Do nothing for I2C
+#ifdef USE_I2C
+            i2cSetSpeed(speed_map[speed]);
+            i2cInit(dev->busdev.i2c.i2cBus);
+#endif
             break;
     }
 }
