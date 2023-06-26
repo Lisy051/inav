@@ -1,0 +1,1 @@
+target_stm32f405xg(XT200F4 HSE_MHZ 24)
