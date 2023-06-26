@@ -25,14 +25,12 @@
 #include "drivers/bus.h"
 
 timerHardware_t timerHardware[] = {
-    DEF_TIM(TIM1,   CH1,  PA8,     TIM_USE_PPM,       0, 0 ),       // PPM IN
-
-    DEF_TIM(TIM4,   CH1,  PB6,    TIM_USE_MC_MOTOR | TIM_USE_FW_MOTOR,  0, 0 ),     // S1 
-    DEF_TIM(TIM4,   CH2,  PB7,    TIM_USE_MC_MOTOR | TIM_USE_FW_MOTOR,  0, 0 ),     // S2
-    DEF_TIM(TIM4,   CH3,  PB8,    TIM_USE_MC_MOTOR | TIM_USE_FW_SERVO,  0, 0 ),     // S3
-    DEF_TIM(TIM4,   CH4,  PB9,    TIM_USE_MC_MOTOR | TIM_USE_FW_SERVO,  0, 0 ),     // S4
-
-    DEF_TIM(TIM3,   CH4,  PB1,    TIM_USE_MC_MOTOR | TIM_USE_FW_SERVO,  0, 0 ),     // CAMERA
+    DEF_TIM(TIM1,   CH1,  PA8,     TIM_USE_PPM,     0, 0 ), // PPM IN
+    DEF_TIM(TIM4,   CH4,  PB9,    TIM_USE_MC_MOTOR, 0, 0 ), // S1
+    DEF_TIM(TIM4,   CH1,  PB6,    TIM_USE_MC_MOTOR, 0, 0 ), // S2
+    DEF_TIM(TIM4,   CH3,  PB8,    TIM_USE_MC_MOTOR, 0, 0 ), // S3
+    DEF_TIM(TIM4,   CH2,  PB7,    TIM_USE_MC_MOTOR, 0, 0 ), // S4
+    DEF_TIM(TIM3,   CH4,  PB1,    TIM_USE_MC_SERVO, 0, 0 ), // CAMERA
 };
 
 const int timerHardwareCount = sizeof(timerHardware) / sizeof(timerHardware[0]);
