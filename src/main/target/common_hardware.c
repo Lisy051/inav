@@ -419,4 +419,11 @@
     BUSDEV_REGISTER_I2C(busdev_pcf8574,      DEVHW_PCF8574,       PCF8574_I2C_BUS,     0x20,               NONE,           DEVFLAGS_NONE, 0);
 #endif
 
+#if defined(USE_007PRO_BATT_SENSOR)
+    #if !defined(BAT_007PRO_I2C_BUS)
+        #define BAT_007PRO_I2C_BUS BUS_I2C2
+    #endif
+    BUSDEV_REGISTER_I2C(busdev_bat_007pro,      DEVHW_007PRO_BAT,       BAT_007PRO_I2C_BUS,     0x0B,               NONE,           DEVFLAGS_NONE,  0);
+#endif
+
 #endif  // USE_TARGET_HARDWARE_DESCRIPTORS

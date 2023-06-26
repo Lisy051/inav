@@ -38,7 +38,7 @@ tables:
     values: ["NONE", "ADC", "VIRTUAL", "FAKE", "ESC"]
     enum: currentSensor_e
   - name: voltage_sensor
-    values: ["NONE", "ADC", "ESC", "FAKE"]
+    values: ["NONE", "ADC", "ESC", "FAKE", "007PRO_BAT"]
     enum: voltageSensor_e
   - name: imu_inertia_comp_method
     values: ["VELNED", "TURNRATE","ADAPTIVE"]

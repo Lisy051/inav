@@ -144,6 +144,7 @@ typedef enum {
     DEVHW_SDCARD,       // Generic SD-Card
     DEVHW_IRLOCK,       // IR-Lock visual positioning hardware
     DEVHW_PCF8574,      // 8-bit I/O expander
+    DEVHW_007PRO_BAT,   // 星图时光无人机电池
 } devHardwareType_e;
 
 typedef enum {

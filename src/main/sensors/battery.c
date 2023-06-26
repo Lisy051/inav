@@ -63,6 +63,10 @@
 #include "sensors/battery_sensor_fake.h"
 #endif
 
+#if defined(USE_007PRO_BATT_SENSOR)
+#include "drivers/SiMToo_Bat.h"
+#endif
+
 #define ADCVREF 3300                            // in mV (3300 = 3.3V)
 
 #define VBATT_CELL_FULL_MAX_DIFF 10             // Max difference with cell max voltage for the battery to be considered full (10mV steps)
@@ -203,6 +207,9 @@ void batteryInit(void)
     batteryFullVoltage = 0;
     batteryWarningVoltage = 0;
     batteryCriticalVoltage = 0;
+#if defined(USE_007PRO_BATT_SENSOR)
+    SiMTooBat_Init();
+#endif
 }
 
 #ifdef USE_ADC
@@ -292,6 +299,14 @@ static void updateBatteryVoltage(timeUs_t timeDelta, bool justConnected)
         vbat = fakeBattSensorGetVBat();
         break;
 #endif
+
+#if defined(USE_007PRO_BATT_SENSOR)
+    case VOLTAGE_SENSOR_007PRO_BAT:
+        SiMTooBattSensorVbat_Updata();
+        vbat = SiMTooBattSensorGetVBat();
+        break;
+#endif
+
     case VOLTAGE_SENSOR_NONE:
         default:
             vbat = 0;

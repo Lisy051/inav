@@ -38,7 +38,8 @@ typedef enum {
     VOLTAGE_SENSOR_NONE = 0,
     VOLTAGE_SENSOR_ADC,
     VOLTAGE_SENSOR_ESC,
-    VOLTAGE_SENSOR_FAKE
+    VOLTAGE_SENSOR_FAKE,
+    VOLTAGE_SENSOR_007PRO_BAT
 } voltageSensor_e;
 
 typedef enum {

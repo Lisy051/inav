@@ -53,7 +53,8 @@ typedef enum {
     OWNER_OLED_DISPLAY,
     OWNER_PINIO,
     OWNER_IRLOCK,
-    OWNER_TOTAL_COUNT
+    OWNER_TOTAL_COUNT,
+    OWNER_BAT
 } resourceOwner_e;
 
 extern const char * const ownerNames[OWNER_TOTAL_COUNT];

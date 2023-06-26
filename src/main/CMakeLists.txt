@@ -97,7 +97,9 @@ main_sources(COMMON_SRC
 
     drivers/adc.c
     drivers/adc.h
-
+    drivers/SiMToo_Bat.c
+    drivers/SiMToo_Bat.h
+    
     drivers/barometer/barometer.h
     drivers/barometer/barometer_bmp085.c
     drivers/barometer/barometer_bmp085.h
