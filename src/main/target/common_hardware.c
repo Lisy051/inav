@@ -426,4 +426,11 @@
     BUSDEV_REGISTER_I2C(busdev_bat_007pro,      DEVHW_007PRO_BAT,       BAT_007PRO_I2C_BUS,     0x0B,               NONE,           DEVFLAGS_NONE,  0);
 #endif
 
+#if defined(USE_RANGEFINDER_RCWL1605_I2C)
+    #if !defined(RCWL1605_I2C_BUS)
+        #define RCWL1605_I2C_BUS BUS_I2C2
+    #endif
+    BUSDEV_REGISTER_I2C(busdev_rcwl1605,      DEVHW_RCWL1605_I2C,       RCWL1605_I2C_BUS,     0x57,               NONE,           DEVFLAGS_USE_RAW_REGISTERS,  0);
+#endif
+
 #endif  // USE_TARGET_HARDWARE_DESCRIPTORS

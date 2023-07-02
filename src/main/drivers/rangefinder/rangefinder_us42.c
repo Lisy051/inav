@@ -48,7 +48,7 @@
 volatile int32_t us42MeasurementCm = RANGEFINDER_OUT_OF_RANGE;
 static int16_t minimumReadingIntervalMs = US42_MIN_PROBE_INTERVAL;
 static uint32_t timeOfLastMeasurementMs;
-uint8_t nullProbeCommandValue[0];
+static uint8_t nullProbeCommandValue[1];
 static bool isUs42Responding = false;
 
 static void us42Init(rangefinderDev_t *rangefinder)

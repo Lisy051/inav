@@ -135,6 +135,7 @@ typedef enum {
     DEVHW_VL53L1X,
     DEVHW_US42,
     DEVHW_TOF10120_I2C,
+    DEVHW_RCWL1605_I2C, // 超声波测距
 
     /* Other hardware */
     DEVHW_MS4525,       // Pitot meter

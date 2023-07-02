@@ -42,6 +42,7 @@
 #include "drivers/rangefinder/rangefinder_virtual.h"
 #include "drivers/rangefinder/rangefinder_us42.h"
 #include "drivers/rangefinder/rangefinder_tof10120_i2c.h"
+#include "drivers/rangefinder/rangefinder_rcwl1605_i2c.h"
 
 #include "fc/config.h"
 #include "fc/runtime_config.h"
@@ -146,6 +147,14 @@ static bool rangefinderDetect(rangefinderDev_t * dev, uint8_t rangefinderHardwar
             if(virtualRangefinderDetect(dev, &rangefinderFakeVtable)) {
                 rangefinderHardware = RANGEFINDER_FAKE;
                 rescheduleTask(TASK_RANGEFINDER, TASK_PERIOD_MS(RANGEFINDER_VIRTUAL_TASK_PERIOD_MS));
+            }
+#endif
+            break;
+            case RANGEFINDER_RCWL1605_I2C:
+#ifdef USE_RANGEFINDER_RCWL1605_I2C
+            if (rcwl1605Detect(dev)) {
+                rangefinderHardware = RANGEFINDER_RCWL1605_I2C;
+                rescheduleTask(TASK_RANGEFINDER, TASK_PERIOD_MS(RANGEFINDER_RCWL1605_TASK_PERIOD_MS));
             }
 #endif
             break;
