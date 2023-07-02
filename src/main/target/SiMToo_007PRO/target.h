@@ -120,13 +120,18 @@
 
 #define VBAT_SCALE_DEFAULT              1100
 
+// ******* Rangefinder ********
+#define USE_RANGEFINDER
+#define USE_RANGEFINDER_RCWL1605_I2C
+#define RCWL1605_I2C_BUS                BUS_I2C2
+
 // ******* FEATURES ********
 #define SENSORS_SET             (SENSOR_ACC|SENSOR_MAG|SENSOR_BARO)
 #define DEFAULT_FEATURES        (FEATURE_TX_PROF_SEL | FEATURE_BLACKBOX | FEATURE_SOFTSERIAL)
 
 // Number of available PWM outputs
-#define MAX_PWM_OUTPUT_PORTS    4
-#define TARGET_MOTOR_COUNT      4
+#define MAX_PWM_OUTPUT_PORTS    5
+#define TARGET_MOTOR_COUNT      5
 
 #define TARGET_IO_PORTA         0xffff
 #define TARGET_IO_PORTB         0xffff
