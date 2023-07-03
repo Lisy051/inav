@@ -35,9 +35,9 @@
 #include "build/debug.h"
 
 // RCWL-1605 Ultrasonic Range Sensor
-#define RCWL_MAX_RANGE_CM 700
-#define RCWL_DETECTION_CONE_DECIDEGREES 250
-#define RCWL_DETECTION_CONE_EXTENDED_DECIDEGREES 300
+#define RCWL_MAX_RANGE_CM 450
+#define RCWL_DETECTION_CONE_DECIDEGREES 900
+#define RCWL_DETECTION_CONE_EXTENDED_DECIDEGREES 900
 #define RCWL_MIN_PROBE_INTERVAL 50
 
 #define RCWL_I2C_Address 0x57
@@ -68,10 +68,10 @@ static void rcwl1605Init(rangefinderDev_t *rangefinder)
 void rcwl1605Update(rangefinderDev_t *rangefinder)
 {
     static uint8_t data[3] = {0};
+    static uint8_t zero_cnt = 0;
     bool ack;
     int32_t d = 0;
     const timeMs_t timeNowMs = millis();
-    
 
     busSetSpeed(rangefinder->busDev, speed_map[I2C_SPEED_100KHZ]);
 
@@ -86,9 +86,17 @@ void rcwl1605Update(rangefinderDev_t *rangefinder)
         if (d > RCWL_MAX_RANGE_CM) {
             MeasurementCm = RANGEFINDER_OUT_OF_RANGE;
         } else {
-            MeasurementCm = d;
+            if (d == 0) {
+                zero_cnt++;
+                if (zero_cnt > 9) {
+                    zero_cnt = 9;
+                    MeasurementCm = RANGEFINDER_HARDWARE_FAILURE;
+                }
+            } else {
+                zero_cnt = 0;
+                MeasurementCm = d;
+            }
         }
-        
     } else {
         MeasurementCm = RANGEFINDER_HARDWARE_FAILURE;
     }
@@ -98,8 +106,6 @@ void rcwl1605Update(rangefinderDev_t *rangefinder)
         // to avoid interference between connective measurements.
         timeOfLastMeasurementMs = timeNowMs;
         rcwl1605Init(rangefinder);
-
-        
     }
 }
 
