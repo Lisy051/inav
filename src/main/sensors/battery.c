@@ -604,6 +604,13 @@ void currentMeterUpdate(timeUs_t timeDelta)
             amperage = fakeBattSensorGetAmerperage();
             break;
 #endif
+
+#if defined(USE_007PRO_BATT_SENSOR)
+        case CURRENT_SENSOR_007PRO_BAT:
+            SiMTooBattSensorAmperage_Updata();
+            amperage = SiMTooBattSensorGetAmerperage();
+            break;
+#endif
         case CURRENT_SENSOR_NONE:
         default:
             amperage = 0;

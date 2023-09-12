@@ -29,6 +29,7 @@
 
 #if defined(USE_007PRO_BATT_SENSOR)
 
+#include "drivers/time.h"
 #include "drivers/bus.h"
 #include "drivers/bus_i2c.h"
 #include "fc/config.h"
@@ -36,6 +37,9 @@
 
 static uint16_t SiMTooVbat = 0;
 static uint16_t SiMTooAmerperage = 0;
+static uint16_t SiMTooMAH = 0;
+static uint16_t SiMTooMAH_last = 0;
+static timeMs_t SiMTooMAH_last_time = 0;
 static busDevice_t *SiMTooBat_dev = 0;
 
 static bool SiMTooBat_Read(uint8_t reg, uint8_t *buf, uint8_t len)
@@ -58,30 +62,48 @@ static bool SiMTooBat_Read(uint8_t reg, uint8_t *buf, uint8_t len)
 
 void SiMTooBattSensorVbat_Updata(void)
 {
-    static uint8_t data[2] = {0};
+    uint8_t data[2] = {0};
     if (SiMTooBat_Read(SIMTOO_BAT_VBAT_REG, data, 2))
     {
-        SiMTooVbat = (((uint16_t)data[1]) << 8 | data[0]) / 10;
+        SiMTooVbat = ((uint16_t)data[1]) << 8 | data[0];
     }
 }
 
 void SiMTooBattSensorAmperage_Updata(void)
 {
-
+    uint8_t data[2] = {0};
+    if (SiMTooBat_Read(SIMTOO_BAT_MAH_REG, data, 2))
+    {
+        SiMTooMAH = ((uint16_t)data[1]) << 8 | data[0];
+        if ((SiMTooMAH < SiMTooMAH_last) && 
+            (SiMTooVbat != 0) && 
+            (millis() != SiMTooMAH_last_time))
+        {
+            float mW = (SiMTooMAH_last - SiMTooMAH) * 7.6f * 360;
+            SiMTooAmerperage = mW / SiMTooVbat / (millis() - SiMTooMAH_last_time);
+            SiMTooMAH_last_time = millis();
+        }
+    }
 }
 
 uint16_t SiMTooBattSensorGetVBat(void)
 {
-    return SiMTooVbat;    // 精确到0.01V
+    return SiMTooVbat / 10;    // 精确到0.01V
 }
 
 uint16_t SiMTooBattSensorGetAmerperage(void)
 {
-    return SiMTooAmerperage;    // 精确到 0.01A
+    return SiMTooAmerperage / 10;    // 精确到 0.01A
 }
 
 void SiMTooBat_Init(void)
 {
+    uint8_t data[2] = {0};
     SiMTooBat_dev = busDeviceInit(BUSTYPE_I2C, DEVHW_007PRO_BAT, 0, OWNER_BAT);
+    if (SiMTooBat_Read(SIMTOO_BAT_MAH_REG, data, 2))
+    {
+        SiMTooMAH_last = ((uint16_t)data[1]) << 8 | data[0];
+        SiMTooMAH_last_time = millis();
+    }
 }
 #endif

@@ -35,7 +35,7 @@ tables:
   - name: failsafe_procedure
     values: ["LAND", "DROP", "RTH", "NONE"]
   - name: current_sensor
-    values: ["NONE", "ADC", "VIRTUAL", "FAKE", "ESC"]
+    values: ["NONE", "ADC", "VIRTUAL", "FAKE", "ESC", "007PRO_BAT"]
     enum: currentSensor_e
   - name: voltage_sensor
     values: ["NONE", "ADC", "ESC", "FAKE", "007PRO_BAT"]
