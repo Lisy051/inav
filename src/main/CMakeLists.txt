@@ -210,6 +210,8 @@ main_sources(COMMON_SRC
     drivers/pitotmeter/pitotmeter_adc.h
     drivers/pitotmeter/pitotmeter_ms4525.c
     drivers/pitotmeter/pitotmeter_ms4525.h
+    drivers/pitotmeter/pitotmeter_dlvr_l10d.c
+    drivers/pitotmeter/pitotmeter_dlvr_l10d.h	
     drivers/pitotmeter/pitotmeter_msp.c
     drivers/pitotmeter/pitotmeter_msp.h
     drivers/pitotmeter/pitotmeter_virtual.c
@@ -289,6 +291,8 @@ main_sources(COMMON_SRC
     fc/firmware_update.h
     fc/firmware_update_common.c
     fc/firmware_update_common.h
+    fc/multifunction.c
+    fc/multifunction.h
     fc/rc_smoothing.c
     fc/rc_smoothing.h
     fc/rc_adjustments.c
@@ -327,6 +331,8 @@ main_sources(COMMON_SRC
     flight/rth_estimator.h
     flight/servos.c
     flight/servos.h
+    flight/mixer_profile.c
+    flight/mixer_profile.h
     flight/wind_estimator.c
     flight/wind_estimator.h
     flight/gyroanalyse.c
@@ -339,6 +345,8 @@ main_sources(COMMON_SRC
     flight/secondary_dynamic_gyro_notch.h
     flight/dynamic_lpf.c
     flight/dynamic_lpf.h
+    flight/ez_tune.c
+    flight/ez_tune.h
 
     io/beeper.c
     io/beeper.h
@@ -503,7 +511,7 @@ main_sources(COMMON_SRC
     io/gps.c
     io/gps.h
     io/gps_ublox.c
-    io/gps_nmea.c
+    io/gps_ublox_utils.c
     io/gps_msp.c
     io/gps_fake.c
     io/gps_private.h
@@ -521,6 +529,8 @@ main_sources(COMMON_SRC
     io/osd_grid.h
     io/osd_hud.c
     io/osd_hud.h
+    io/osd_joystick.c
+    io/osd_joystick.h
     io/smartport_master.c
     io/smartport_master.h
     io/vtx.c
@@ -535,6 +545,8 @@ main_sources(COMMON_SRC
     io/vtx_ffpv24g.h
     io/vtx_control.c
     io/vtx_control.h
+    io/vtx_msp.c
+    io/vtx_msp.h
 
     navigation/navigation.c
     navigation/navigation.h
@@ -566,10 +578,6 @@ main_sources(COMMON_SRC
     telemetry/crsf.h
     telemetry/srxl.c
     telemetry/srxl.h
-    telemetry/frsky.c
-    telemetry/frsky.h
-    telemetry/frsky_d.c
-    telemetry/frsky_d.h
     telemetry/ghst.c
     telemetry/ghst.h
     telemetry/hott.c

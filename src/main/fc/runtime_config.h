@@ -104,12 +104,13 @@ typedef enum {
     TURN_ASSISTANT        = (1 << 14),
     TURTLE_MODE           = (1 << 15),
     SOARING_MODE          = (1 << 16),
+    ANGLEHOLD_MODE        = (1 << 17),
 } flightModeFlags_e;
 
 extern uint32_t flightModeFlags;
 
-#define DISABLE_FLIGHT_MODE(mask) disableFlightMode(mask)
-#define ENABLE_FLIGHT_MODE(mask) enableFlightMode(mask)
+#define DISABLE_FLIGHT_MODE(mask) (flightModeFlags &= ~(mask))
+#define ENABLE_FLIGHT_MODE(mask) (flightModeFlags |= (mask))
 #define FLIGHT_MODE(mask) (flightModeFlags & (mask))
 
 typedef enum {
@@ -139,6 +140,7 @@ typedef enum {
     FW_HEADING_USE_YAW                  = (1 << 24),
     ANTI_WINDUP_DEACTIVATED             = (1 << 25),
     LANDING_DETECTED                    = (1 << 26),
+    IN_FLIGHT_EMERG_REARM               = (1 << 27),
 } stateFlags_t;
 
 #define DISABLE_STATE(mask) (stateFlags &= ~(mask))
@@ -161,6 +163,7 @@ typedef enum {
     FLM_CRUISE,
     FLM_LAUNCH,
     FLM_FAILSAFE,
+    FLM_ANGLEHOLD,
     FLM_COUNT
 } flightModeForTelemetry_e;
 
@@ -170,25 +173,28 @@ flightModeForTelemetry_e getFlightModeForTelemetry(void);
 
 #define SIMULATOR_MSP_VERSION  2     // Simulator MSP version
 #define SIMULATOR_BARO_TEMP    25    // °C
-#define SIMULATOR_FULL_BATTERY 12.6f // Volts
+#define SIMULATOR_FULL_BATTERY 126   // Volts*10
 #define SIMULATOR_HAS_OPTION(flag) ((simulatorData.flags & flag) != 0)
 
 typedef enum {
     HITL_RESET_FLAGS            = (0 << 0),
-	HITL_ENABLE					= (1 << 0),
-	HITL_SIMULATE_BATTERY		= (1 << 1),
-	HITL_MUTE_BEEPER			= (1 << 2),
-	HITL_USE_IMU			    = (1 << 3), // Use the Acc and Gyro data provided by XPlane to calculate Attitude (i.e. 100% of the calculations made by AHRS from INAV)
-	HITL_HAS_NEW_GPS_DATA		= (1 << 4),
-	HITL_EXT_BATTERY_VOLTAGE	= (1 << 5), // Extend MSP_SIMULATOR format 2
-    HITL_AIRSPEED               = (1 << 6) 
+    HITL_ENABLE					= (1 << 0),
+    HITL_SIMULATE_BATTERY		= (1 << 1),
+    HITL_MUTE_BEEPER			= (1 << 2),
+    HITL_USE_IMU			    = (1 << 3), // Use the Acc and Gyro data provided by XPlane to calculate Attitude (i.e. 100% of the calculations made by AHRS from INAV)
+    HITL_HAS_NEW_GPS_DATA		= (1 << 4),
+    HITL_EXT_BATTERY_VOLTAGE	= (1 << 5), // Extend MSP_SIMULATOR format 2
+    HITL_AIRSPEED               = (1 << 6),
+    HITL_EXTENDED_FLAGS         = (1 << 7), // Extend MSP_SIMULATOR format 2
+    HITL_GPS_TIMEOUT            = (1 << 8),
+    HITL_PITOT_FAILURE          = (1 << 9)
 } simulatorFlags_t;
 
 typedef struct {
-	simulatorFlags_t flags;
-	uint8_t debugIndex;
+    simulatorFlags_t flags;
+    uint8_t debugIndex;
     uint8_t vbat;      // 126 -> 12.6V
-	uint16_t airSpeed; // cm/s
+    uint16_t airSpeed; // cm/s
     int16_t input[4];
 } simulatorData_t;
 
@@ -196,8 +202,7 @@ extern simulatorData_t simulatorData;
 
 #endif
 
-uint32_t enableFlightMode(flightModeFlags_e mask);
-uint32_t disableFlightMode(flightModeFlags_e mask);
+void updateFlightModeChangeBeeper(void);
 
 bool sensors(uint32_t mask);
 void sensorsSet(uint32_t mask);
