@@ -1,2 +1,4 @@
 target_stm32f405xg(F4AIRV100)
 target_stm32f405xg(F4AIRV150)
+target_stm32f405xg(F4AIRV200)
+target_at32f43x_xGT7(F4AIRV200AT)

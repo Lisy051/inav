@@ -19,82 +19,139 @@
 
 #define USE_TARGET_CONFIG
 
-#define TARGET_BOARD_IDENTIFIER "F4AIR"
+#define TARGET_BOARD_IDENTIFIER "LYRC"
 #define USBD_PRODUCT_STRING "F4AIR Ly"
 
 // ******** Board LEDs  **********************
-#define LED0                    PC14
-#define LED1                    PC15
+#if defined(F4AIRV100) || defined(F4AIRV150)
+    #define LED0                    PC14
+    #define LED1                    PC15
+#else
+    #define LED0                    PB14
+    #define LED1                    PB15
+#endif
 
 // ******* Beeper ***********
-#define BEEPER                  PC13
+#if defined(F4AIRV100) || defined(F4AIRV150)
+    #define BEEPER                  PC13
+#else
+    #define BEEPER                  PA0
+#endif
 #define BEEPER_INVERTED
 
 // ******* GYRO and ACC ********
 #define USE_EXTI
-#define MPU6500_EXTI_PIN        PC4
+#if defined(F4AIRV100) || defined(F4AIRV150)
+    #define MPU6500_EXTI_PIN        PC4
 
-#define USE_MPU_DATA_READY_SIGNAL
+    #define USE_MPU_DATA_READY_SIGNAL
 
-#define USE_IMU_MPU6500
-#define IMU_MPU6500_ALIGN               CW270_DEG_FLIP
-#define MPU6500_SPI_BUS                 BUS_SPI3
-#define MPU6500_CS_PIN                  PA15
+    #define USE_IMU_MPU6500
+    #define IMU_MPU6500_ALIGN       CW270_DEG_FLIP
+    #define MPU6500_SPI_BUS         BUS_SPI3
+    #define MPU6500_CS_PIN          PA15
+#else
+    #define USE_IMU_ICM42605
+    #define IMU_ICM42605_ALIGN      CW90_DEG_FLIP
+    #define ICM42605_SPI_BUS        BUS_SPI3
+    #define ICM42605_CS_PIN         PA15
+    #define ICM42605_EXTI_PIN       PC13
+#endif
 
 //*********** Magnetometer / Compass *************
 #define USE_MAG
-
-#ifdef F4AIRV100
-#define USE_MAG_AK8975
-#define AK8975_SPI_BUS                  BUS_SPI3
-#define AK8975_CS_PIN                   PC10
-
+#define USE_MAG_ALL
+#if defined(F4AIRV100)
+    #define AK8975_SPI_BUS          BUS_SPI3
+    #define AK8975_CS_PIN           PC10
 #else
-#define USE_MAG
-#define MAG_I2C_BUS                     BUS_I2C1
-#define USE_MAG_IST8310
-
+    #if defined(F4AIRV150)
+        #define MAG_I2C_BUS         BUS_I2C1
+    #else
+        #define MAG_I2C_BUS         BUS_I2C2
+    #endif
 #endif
 
 // *************** Baro **************************
 #define USE_BARO
-#define USE_BARO_SPL06
+#define USE_BARO_ALL
 
-#ifdef F4AIRV100
-#define USE_BARO_SPI_SPL06
-#define SPL06_SPI_BUS                  BUS_SPI3
-#define SPL06_CS_PIN                   PC11
-
+#if defined(F4AIRV100)
+    #define SPL06_SPI_BUS           BUS_SPI3
+    #define SPL06_CS_PIN            PC11
 #else
-#define BARO_I2C_BUS                   BUS_I2C1
+    #if defined(F4AIRV150)
+        #define BARO_I2C_BUS        BUS_I2C1
+    #else
+        #define BARO_I2C_BUS        BUS_I2C2
+    #endif
 #endif
 
 // ******* SERIAL ********
 #define USE_VCP
-#define VBUS_SENSING_PIN                PA8
+#define VBUS_SENSING_PIN            PA8
 #define VBUS_SENSING_ENABLED
 
 #define USE_UART1
-#define UART1_TX_PIN                    PA9
-#define UART1_RX_PIN                    PA10
+#define UART1_TX_PIN                PA9
+#define UART1_RX_PIN                PA10
 
 #define USE_UART2
-#define UART2_TX_PIN                    PA2
-#define UART2_RX_PIN                    NONE
+#define UART2_TX_PIN                PA2
+#if defined (F4AIRV100) || defined(F4AIRV150)
+    #define UART2_RX_PIN            NONE
+#else
+    #define UART2_RX_PIN            PA3
+#endif
 
-#define USE_UART3
-#define UART3_TX_PIN                    PB10
-#define UART3_RX_PIN                    PB11
+#if defined (F4AIRV100) || defined(F4AIRV150)
+    #define USE_UART3
+    #define UART3_TX_PIN            PB10
+    #define UART3_RX_PIN            PB11
+#elif defined(F4AIRV200)
+    #define USE_SOFTSERIAL1
+    #define SOFTSERIAL_1_TX_PIN     PC4
+    #define SOFTSERIAL_1_RX_PIN     PC5
+#else
+    #define USE_UART3
+    #define UART3_TX_PIN            PC4
+    #define UART3_RX_PIN            PC5
+#endif
 
 #define USE_UART4
-#define UART4_TX_PIN                    PA0
-#define UART4_RX_PIN                    PA1
+#if defined (F4AIRV100) || defined(F4AIRV150)
+    #define UART4_TX_PIN            PA0
+    #define UART4_RX_PIN            PA1
+#else
+    #define UART4_TX_PIN            PC10
+    #define UART4_RX_PIN            PC11
+#endif
 
 #define USE_UART5
-#define UART5_TX_PIN                    PC12
-#define UART5_RX_PIN                    PD2
+#define UART5_TX_PIN                PC12
+#define UART5_RX_PIN                PD2
 
-#define SERIAL_PORT_COUNT               6
+#if defined(F4AIRV200)
+    #define USE_SOFTSERIAL2
+    #define SOFTSERIAL_2_TX_PIN     PC2
+    #define SOFTSERIAL_2_RX_PIN     PC3
+    #define SERIAL_PORT_COUNT       7
+#elif defined(F4AIRV200AT)
+    #define USE_UART8
+    #define UART8_TX_PIN            PC2
+    #define UART8_RX_PIN            PC3
+    #define SERIAL_PORT_COUNT       7
+#else
+    #define SERIAL_PORT_COUNT       6
+#endif
+
+#define DEFAULT_RX_TYPE             RX_TYPE_SERIAL
+#define SERIALRX_PROVIDER           SERIALRX_SBUS
+#if defined (F4AIRV100) || defined(F4AIRV150)
+    #define SERIALRX_UART           SERIAL_PORT_USART2
+#else
+    #define SERIALRX_UART           SERIAL_PORT_USART5
+#endif
 
 // ******* SPI ********
 #define USE_SPI
@@ -113,40 +170,61 @@
 // ******* I2C ********
 #define USE_I2C
 
-#define USE_I2C_DEVICE_1
-#define I2C1_SCL                PB6
-#define I2C1_SDA                PB7
+#if defined (F4AIRV100) || defined(F4AIRV150)
+    #define USE_I2C_DEVICE_1
+    #define I2C1_SCL                PB6
+    #define I2C1_SDA                PB7
+#else
+    #define USE_I2C_DEVICE_2
+    #define I2C2_SCL                PB10
+    #define I2C2_SDA                PB11
+#endif
 
 //******* FLASH ********
 #define USE_FLASHFS
-#define USE_FLASH_M25P16
-#define M25P16_SPI_BUS                  BUS_SPI1
-#define M25P16_CS_PIN                   PA4
-
 #define ENABLE_BLACKBOX_LOGGING_ON_SPIFLASH_BY_DEFAULT
+
+#define USE_FLASH_M25P16
+#define M25P16_SPI_BUS          BUS_SPI1
+#define M25P16_CS_PIN           PA4
+
+#define USE_FLASH_W25N01G
+#define W25N01G_SPI_BUS         BUS_SPI1
+#define W25N01G_CS_PIN          PA4
 
 // ******* ADC ********
 #define USE_ADC
+#if defined (F4AIRV100) || defined(F4AIRV150)
+    #define ADC_CHANNEL_1_PIN               PC5
+    #define ADC_CHANNEL_2_PIN               PC2
+    #define ADC_CHANNEL_3_PIN               PC3
 
-#define ADC_CHANNEL_1_PIN               PC5
-#define ADC_CHANNEL_2_PIN               PC2
-#define ADC_CHANNEL_3_PIN               PC3
+    #define VBAT_ADC_CHANNEL                ADC_CHN_1
+    #define RSSI_ADC_CHANNEL                ADC_CHN_2
+    #define CURRENT_METER_ADC_CHANNEL       ADC_CHN_3
 
-#define VBAT_ADC_CHANNEL                ADC_CHN_1
-#define RSSI_ADC_CHANNEL                ADC_CHN_2
-#define CURRENT_METER_ADC_CHANNEL       ADC_CHN_3
+    #define VBAT_SCALE_DEFAULT              920
+#else
+    #define ADC_CHANNEL_1_PIN               PC0
+    #define ADC_CHANNEL_2_PIN               PC1
 
-#define VBAT_SCALE_DEFAULT              920
+    #define VBAT_ADC_CHANNEL                ADC_CHN_1
+    #define CURRENT_METER_ADC_CHANNEL       ADC_CHN_2
+
+    #define VBAT_SCALE_DEFAULT              1100
+#endif
 
 // ******* Rangefinder ********
 #define USE_RANGEFINDER
-#define USE_RANGEFINDER_RCWL1605_I2C
-#define RCWL1605_I2C_BUS                BUS_I2C1
-
 
 // ******* FEATURES ********
+#if defined (F4AIRV200) || defined(F4AIRV200AT)
+    #define USE_LED_STRIP
+    #define WS2811_PIN              PA1
+#endif
+
 #define SENSORS_SET             (SENSOR_ACC|SENSOR_MAG|SENSOR_BARO)
-#define DEFAULT_FEATURES        (FEATURE_TX_PROF_SEL | FEATURE_BLACKBOX | FEATURE_SOFTSERIAL)
+#define DEFAULT_FEATURES        (FEATURE_TX_PROF_SEL | FEATURE_VBAT | FEATURE_BLACKBOX | FEATURE_SOFTSERIAL)
 
 // Number of available PWM outputs
 #define MAX_PWM_OUTPUT_PORTS    8
@@ -161,4 +239,3 @@
 #define USE_DSHOT
 #define USE_SERIALSHOT
 #define USE_ESC_SENSOR
-#define USE_SERIAL_4WAY_BLHELI_INTERFACE
