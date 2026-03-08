@@ -27,8 +27,8 @@
     #define LED0                    PC14
     #define LED1                    PC15
 #else
-    #define LED0                    PB14
-    #define LED1                    PB15
+    #define LED0                    PB15    // 绿色
+    #define LED1                    PB14    // 红色
 #endif
 
 // ******* Beeper ***********
@@ -52,7 +52,8 @@
     #define MPU6500_CS_PIN          PA15
 #else
     #define USE_IMU_ICM42605
-    #define IMU_ICM42605_ALIGN      CW90_DEG_FLIP
+    #define IMU_ICM42605_ALIGN      CW90_DEG    // imu朝上
+    //#define IMU_ICM42605_ALIGN      CW90_DEG_FLIP // imu朝下
     #define ICM42605_SPI_BUS        BUS_SPI3
     #define ICM42605_CS_PIN         PA15
     #define ICM42605_EXTI_PIN       PC13
