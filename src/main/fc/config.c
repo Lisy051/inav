@@ -67,7 +67,7 @@
 #include "flight/ez_tune.h"
 
 #include "fc/config.h"
-#include "fc/controlrate_profile.h"
+#include "fc/control_profile.h"
 #include "fc/rc_adjustments.h"
 #include "fc/rc_controls.h"
 #include "fc/rc_curves.h"
@@ -115,9 +115,6 @@ PG_RESET_TEMPLATE(systemConfig_t, systemConfig,
 #endif
 #ifdef USE_I2C
     .i2c_speed = SETTING_I2C_SPEED_DEFAULT,
-#endif
-#ifdef USE_UNDERCLOCK
-    .cpuUnderclock = SETTING_CPU_UNDERCLOCK_DEFAULT,
 #endif
     .throttle_tilt_compensation_strength = SETTING_THROTTLE_TILT_COMP_STR_DEFAULT,      // 0-100, 0 - disabled
     .craftName = SETTING_NAME_DEFAULT,
@@ -193,6 +190,18 @@ uint32_t getGyroLooptime(void)
 
 void validateAndFixConfig(void)
 {
+
+#ifdef USE_ADAPTIVE_FILTER
+//     gyroConfig()->adaptiveFilterMinHz has to be at least 5 units lower than gyroConfig()->gyro_main_lpf_hz
+     if (gyroConfig()->adaptiveFilterMinHz + 5 > gyroConfig()->gyro_main_lpf_hz) {
+        gyroConfigMutable()->adaptiveFilterMinHz = gyroConfig()->gyro_main_lpf_hz - 5;
+    }
+    //gyroConfig()->adaptiveFilterMaxHz has to be at least 5 units higher than gyroConfig()->gyro_main_lpf_hz
+    if (gyroConfig()->adaptiveFilterMaxHz - 5 < gyroConfig()->gyro_main_lpf_hz) {
+        gyroConfigMutable()->adaptiveFilterMaxHz = gyroConfig()->gyro_main_lpf_hz + 5;
+    }
+#endif
+
     if (accelerometerConfig()->acc_notch_cutoff >= accelerometerConfig()->acc_notch_hz) {
         accelerometerConfigMutable()->acc_notch_hz = 0;
     }
@@ -287,6 +296,14 @@ void createDefaultConfig(void)
     featureSet(FEATURE_AIRMODE);
 
     targetConfiguration();
+
+#ifdef MSP_UART
+    int port = findSerialPortIndexByIdentifier(MSP_UART);
+    if (port) {
+        serialConfigMutable()->portConfigs[port].functionMask = FUNCTION_MSP;
+        serialConfigMutable()->portConfigs[port].msp_baudrateIndex = BAUD_115200;
+    }
+#endif
 }
 
 void resetConfigs(void)
@@ -304,7 +321,7 @@ void resetConfigs(void)
 
 static void activateConfig(void)
 {
-    activateControlRateConfig();
+    activateControlConfig();
     activateBatteryProfile();
     activateMixerConfig();
 
@@ -426,7 +443,7 @@ bool setConfigProfile(uint8_t profileIndex)
     pgActivateProfile(profileIndex);
     systemConfigMutable()->current_profile_index = profileIndex;
     // set the control rate profile to match
-    setControlRateProfile(profileIndex);
+    setControlProfile(profileIndex);
 #ifdef USE_EZ_TUNE
     ezTuneUpdate();
 #endif

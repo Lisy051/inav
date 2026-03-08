@@ -36,7 +36,7 @@ typedef enum {
     FEATURE_VBAT = 1 << 1,
     FEATURE_TX_PROF_SEL = 1 << 2,       // Profile selection by TX stick command
     FEATURE_BAT_PROFILE_AUTOSWITCH = 1 << 3,
-    FEATURE_UNUSED_12 = 1 << 4,  //was FEATURE_MOTOR_STOP
+    FEATURE_GEOZONE = 1 << 4,  //was FEATURE_MOTOR_STOP
     FEATURE_UNUSED_1 = 1 << 5,   // was FEATURE_SERVO_TILT was FEATURE_DYNAMIC_FILTERS
     FEATURE_SOFTSERIAL = 1 << 6,
     FEATURE_GPS = 1 << 7,
@@ -63,7 +63,7 @@ typedef enum {
     FEATURE_PWM_OUTPUT_ENABLE = 1 << 28,
     FEATURE_OSD = 1 << 29,
     FEATURE_FW_LAUNCH = 1 << 30,
-    FEATURE_FW_AUTOTRIM = 1 << 31,
+    FEATURE_FW_AUTOTRIM = 1U << 31,
 } features_e;
 
 typedef struct systemConfig_s {
@@ -76,9 +76,6 @@ typedef struct systemConfig_s {
 #endif
 #ifdef USE_I2C
     uint8_t i2c_speed;
-#endif
-#ifdef USE_UNDERCLOCK
-    uint8_t cpuUnderclock;
 #endif
     uint8_t throttle_tilt_compensation_strength;    // the correction that will be applied at throttle_correction_angle.
     char craftName[MAX_NAME_LENGTH + 1];

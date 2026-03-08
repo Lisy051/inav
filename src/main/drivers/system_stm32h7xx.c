@@ -60,16 +60,8 @@ uint32_t systemBootloaderAddress(void)
 #endif
 }
 
-void systemClockSetup(uint8_t cpuUnderclock)
-{
-    (void)cpuUnderclock;
-    // This is a stub
-}
-
 void systemInit(void)
 {
-    checkForBootLoaderRequest();
-
     // Configure NVIC preempt/priority groups
     HAL_NVIC_SetPriorityGrouping(NVIC_PRIORITY_GROUPING);
 
